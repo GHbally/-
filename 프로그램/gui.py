@@ -23,13 +23,15 @@ favorite_icon = Image.open("image/즐겨찾기.png").resize((100, 100), Image.LA
 chart_icon = Image.open("image/그래프.png").resize((100, 100), Image.LANCZOS)
 mail_icon = Image.open("image/메일.png").resize((100, 100), Image.LANCZOS)
 main_image = Image.open("image/메인.png").resize((400, 400), Image.LANCZOS)
-
+favorite_on_icon = Image.open("image/즐겨찾기.png").resize((20, 20), Image.LANCZOS)
+favorite_off_icon = Image.open("image/즐겨찾기off.png").resize((20, 20), Image.LANCZOS)
 search_photo = ImageTk.PhotoImage(search_icon)
 favorite_photo = ImageTk.PhotoImage(favorite_icon)
 chart_photo = ImageTk.PhotoImage(chart_icon)
 mail_photo = ImageTk.PhotoImage(mail_icon)
 main_photo = ImageTk.PhotoImage(main_image)
-
+favorite_on_photo = ImageTk.PhotoImage(favorite_on_icon)
+favorite_off_photo = ImageTk.PhotoImage(favorite_off_icon)
 # 프레임 설정
 left_frame = tk.Frame(root, width=100, bg='white')
 left_frame.pack(side='left', fill='y')
@@ -39,11 +41,13 @@ right_frame.pack(side='right', expand=True, fill='both')
 
 # 검색 결과 리스트
 search_results = []
+favorite_stations = []  # 즐겨찾기 리스트
 
 # 검색 결과를 클릭했을 때의 동작
 def on_result_click(id):
     global map_label  # 전역 변수로 선언
     station_info = gasstation.get_gas_station_info(api_key=GASSTATION_API_KEY, station_id=id)
+    station_info['id'] = id  # station_info에 'id' 키 추가
     show_station_info(station_info)
     print(station_info["gis_x"], station_info["gis_y"])
     lat, lon = gasstation.katec_to_wgs84(float(station_info["gis_x"]), float(station_info["gis_y"]))
@@ -117,6 +121,7 @@ def show_favorite():
         map_label = None  # map_label을 None으로 설정
     label = tk.Label(right_frame, text="즐겨찾기 화면")
     label.pack()
+    print(favorite_stations)
 
 
 def show_chart():
@@ -213,6 +218,17 @@ def show_mail():
     label = tk.Label(right_frame, text="메일 화면")
     label.pack()
 
+def toggle_favorite(station_info, button):
+    station_id = station_info["id"]
+    if any(station["id"] == station_id for station in favorite_stations):
+        favorite_stations[:] = [station for station in favorite_stations if station["id"] != station_id]
+        button.config(image=favorite_off_photo)
+        messagebox.showinfo("즐겨찾기", "즐겨찾기에서 제거되었습니다.")
+    else:
+        favorite_stations.append(station_info)
+        button.config(image=favorite_on_photo)
+        messagebox.showinfo("즐겨찾기", "즐겨찾기에 추가되었습니다.")
+
 def show_station_info(station_info):
     global map_label  # 전역 변수로 선언
 
@@ -221,6 +237,14 @@ def show_station_info(station_info):
 
     top_label = tk.Label(info_frame, text="주유소 정보", font=("Helvetica", 20), bg='lightgray')
     top_label.grid(row=0, column=0, columnspan=2, pady=10)
+
+    if station_info["id"] in favorite_stations:
+        favorite_state_button = tk.Button(info_frame, image=favorite_on_photo,
+                                    command=lambda: toggle_favorite(station_info, favorite_state_button))
+    else:
+        favorite_state_button = tk.Button(info_frame, image=favorite_off_photo,
+                                    command=lambda: toggle_favorite(station_info, favorite_state_button))
+    favorite_state_button.grid(row=0, column=1, padx=10, pady=10, sticky='ne')
 
     info_labels = [
         ("상호", station_info["name"]),
