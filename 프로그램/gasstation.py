@@ -119,11 +119,12 @@ def get_gas_station_info(api_key, station_id):
         station_info["tel"] = item.findtext('TEL')
         station_info["gis_x"] = item.findtext('GIS_X_COOR')
         station_info["gis_y"] = item.findtext('GIS_Y_COOR')
-
-        # 마지막 OIL_PRICE 요소만 가져옴
-        oil_price = item.findall('OIL_PRICE')[-1]
-        station_info["oil_price"] = oil_price.findtext('PRICE')
-        station_info["product_code"] = oil_price.findtext('PRODCD')
+        prices = {"B027": "휘발유", "D047": "경유"}
+        for oil_price in item.findall('OIL_PRICE'):
+            prodcd = oil_price.findtext('PRODCD')
+            price = oil_price.findtext('PRICE')
+            if prodcd in prices:
+                station_info[prices[prodcd] + "_price"] = price
         station_info["trade_date"] = oil_price.findtext('TRADE_DT')
         station_info["trade_time"] = oil_price.findtext('TRADE_TM')
 

@@ -33,15 +33,17 @@ main_photo = ImageTk.PhotoImage(main_image)
 favorite_on_photo = ImageTk.PhotoImage(favorite_on_icon)
 favorite_off_photo = ImageTk.PhotoImage(favorite_off_icon)
 # 프레임 설정
-left_frame = tk.Frame(root, width=100, bg='white')
+left_frame = tk.Frame(root, width=100, bg='lightgray')
 left_frame.pack(side='left', fill='y')
 
-right_frame = tk.Frame(root, bg='white')
+right_frame = tk.Frame(root, bg='lightgray')
 right_frame.pack(side='right', expand=True, fill='both')
 
 # 검색 결과 리스트
 search_results = []
 favorite_stations = []  # 즐겨찾기 리스트
+map_label = None  # 전역 변수로 선언
+info_frame = None  # 전역 변수로 선언
 
 # 검색 결과를 클릭했을 때의 동작
 def on_result_click(id):
@@ -60,14 +62,21 @@ def on_result_click(id):
 
 # 검색 버튼 눌렀을 때의 동작
 def show_search():
-    global map_label  # 전역 변수로 선언
+    global map_label, info_frame  # 전역 변수로 선언
     for widget in right_frame.winfo_children():
-        if widget != map_label:  # map_label을 삭제하지 않도록 예외 처리
-            widget.destroy()
+        widget.destroy()  # 모든 위젯을 삭제
+
+    if map_label:
+        map_label.destroy()
+        map_label = None  # map_label을 None으로 설정
+
+    if info_frame:
+        info_frame.destroy()
+        info_frame = None  # info_frame을 None으로 설정
 
     # 검색 결과 프레임 생성
     results_frame = tk.Frame(right_frame)
-    results_frame.grid(row=1, column=0, columnspan=2, sticky="nsew")
+    results_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
 
     top_label = tk.Label(results_frame, text="검색 (지역 검색)", font=("Helvetica", 14))
     top_label.grid(row=0, column=0, columnspan=2, pady=10)
@@ -97,41 +106,106 @@ def show_search():
     search_button.grid(row=1, column=1, padx=10, pady=10)
 
     def update_search_results(gas_stations):
-        gas_station_names = [station["name"] for station in gas_stations]
-        combo = ttk.Combobox(results_frame, values=gas_station_names, state="readonly")
-        combo.grid(row=2, column=0, columnspan=2, pady=10, padx=10, sticky='w')
+        for widget in results_frame.winfo_children():
+            if widget not in (top_label, search_entry, search_button):
+                widget.destroy()
 
-        def on_combo_select(event):
-            selected_index = combo.current()
-            if selected_index >= 0:
-                selected_station = gas_stations[selected_index]
+        gas_station_names = [station["name"] for station in gas_stations]
+        listbox = tk.Listbox(results_frame, width=50,height=3, selectmode='single')
+        listbox.grid(row=2, column=0, columnspan=2, pady=10, padx=10, sticky='w')
+
+        for name in gas_station_names:
+            listbox.insert(tk.END, name)
+
+        def on_listbox_select(event):
+            selected_index = listbox.curselection()
+            if selected_index:
+                selected_station = gas_stations[selected_index[0]]
                 on_result_click(selected_station['id'])
 
-        combo.bind("<<ComboboxSelected>>", on_combo_select)
+        listbox.bind("<<ListboxSelect>>", on_listbox_select)
 
     update_search_results([])
 
+
 def show_favorite():
-    global map_label  # 전역 변수로 선언
+    global map_label, info_frame  # 전역 변수로 선언
     for widget in right_frame.winfo_children():
-        if widget != map_label:  # map_label을 삭제하지 않도록 예외 처리
-            widget.destroy()
-    if map_label:
-        map_label.destroy()
-        map_label = None  # map_label을 None으로 설정
-    label = tk.Label(right_frame, text="즐겨찾기 화면")
-    label.pack()
-    print(favorite_stations)
+        widget.destroy()  # 모든 위젯을 삭제
+
+    # right_frame의 열 구성 설정
+    right_frame.columnconfigure(0, weight=1)
+    right_frame.columnconfigure(1, weight=2)
+    right_frame.rowconfigure(0, weight=1)
+
+    # 즐겨찾기 리스트 프레임 생성
+    favorite_frame = tk.Frame(right_frame)
+    favorite_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+    # 즐겨찾기 리스트 박스 생성
+    favorite_listbox = tk.Listbox(favorite_frame, width=30, height=20)
+    favorite_listbox.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+    # 선택된 주유소 정보 프레임 생성
+    info_frame = tk.Frame(right_frame, bg='white')
+    info_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+
+    def update_info(event):
+        selected_index = favorite_listbox.curselection()
+        if selected_index:
+            selected_station = favorite_stations[selected_index[0]]
+            show_station_info1(selected_station)
+
+    favorite_listbox.bind("<<ListboxSelect>>", update_info)
+
+    for station in favorite_stations:
+        favorite_listbox.insert(tk.END, station["name"])
+def show_station_info1(station_info):
+    global map_label, info_frame  # 전역 변수로 선언
+
+    # info_frame을 업데이트 하기 전에 기존 위젯을 삭제
+    for widget in info_frame.winfo_children():
+        widget.destroy()
+
+    top_label = tk.Label(info_frame, text="주유소 정보", font=("Helvetica", 20), bg='lightgray')
+    top_label.grid(row=0, column=0, columnspan=2, pady=10)
+
+    if any(station["id"] == station_info["id"] for station in favorite_stations):
+        favorite_state_button = tk.Button(info_frame, image=favorite_on_photo,
+                                          command=lambda: toggle_favorite(station_info, favorite_state_button))
+    else:
+        favorite_state_button = tk.Button(info_frame, image=favorite_off_photo,
+                                          command=lambda: toggle_favorite(station_info, favorite_state_button))
+    favorite_state_button.grid(row=0, column=1, padx=10, pady=10, sticky='ne')
+
+    info_labels = [
+        ("상호", station_info["name"]),
+        ("도로명주소", station_info.get("address", "N/A")),  # 수정된 부분
+        ("전화번호", station_info["tel"]),
+        ("휘발유 가격", station_info.get("휘발유_price", "N/A")),
+        ("경유 가격", station_info.get("경유_price", "N/A")),
+        ("기준 일자", station_info["trade_date"]),
+        ("기준 시간", station_info["trade_time"])
+    ]
+
+    for i, (label_text, info_text) in enumerate(info_labels):
+        if label_text not in ("GIS X 좌표", "GIS Y 좌표"):  # GIS X, Y 좌표 부분 제외
+            label = tk.Label(info_frame, text=label_text, bg='lightgray')
+            label.grid(row=i + 1, column=0, padx=10, pady=5, sticky='w')
+
+            info_label = tk.Label(info_frame, text=info_text, bg='lightgray')
+            info_label.grid(row=i + 1, column=1, padx=10, pady=5, sticky='w')
+
 
 
 def show_chart():
     from matplotlib import rcParams
     rcParams["font.family"] = "Malgun Gothic"
     rcParams["axes.unicode_minus"] = False
-    global map_label  # 전역 변수로 선언
+    global map_label, info_frame  # 전역 변수로 선언
     for widget in right_frame.winfo_children():
-        if widget != map_label:  # map_label을 삭제하지 않도록 예외 처리
-            widget.destroy()
+        widget.destroy()  # 모든 위젯을 삭제
+
     if map_label:
         map_label.destroy()
         map_label = None  # map_label을 None으로 설정
@@ -237,10 +311,10 @@ def show_chart():
     canvas.draw()
     canvas.get_tk_widget().pack(fill='both', expand=True)
 def show_mail():
-    global map_label  # 전역 변수로 선언
+    global map_label, info_frame  # 전역 변수로 선언
     for widget in right_frame.winfo_children():
-        if widget != map_label:  # map_label을 삭제하지 않도록 예외 처리
-            widget.destroy()
+        widget.destroy()  # 모든 위젯을 삭제
+
     if map_label:
         map_label.destroy()
         map_label = None  # map_label을 None으로 설정
@@ -259,8 +333,10 @@ def toggle_favorite(station_info, button):
         messagebox.showinfo("즐겨찾기", "즐겨찾기에 추가되었습니다.")
 
 def show_station_info(station_info):
-    global map_label  # 전역 변수로 선언
+    global map_label, info_frame  # 전역 변수로 선언
 
+    if info_frame:
+        info_frame.destroy()
     info_frame = tk.Frame(right_frame, bg='lightgray')
     info_frame.grid(row=2, column=0, columnspan=1, sticky="nsew")  # 기존의 검색 결과 프레임 아래에 배치
 
@@ -280,8 +356,8 @@ def show_station_info(station_info):
         ("상호", station_info["name"]),
         ("도로명주소", station_info.get("address", "N/A")),  # 수정된 부분
         ("전화번호", station_info["tel"]),
-        ("휘발유 가격", station_info["oil_price"]),
-        ("제품 코드", station_info["product_code"]),
+        ("휘발유 가격", station_info.get("휘발유_price", "N/A")),
+        ("경유 가격", station_info.get("경유_price", "N/A")),
         ("기준 일자", station_info["trade_date"]),
         ("기준 시간", station_info["trade_time"])
     ]
