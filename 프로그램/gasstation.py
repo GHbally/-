@@ -138,3 +138,88 @@ def geocoding(address):
     crd = {"lat": geo.latitude, "lng": geo.longitude}
     return crd
 
+def get_avg_prices(api_key, station_id):
+    url = "http://www.opinet.co.kr/api/avgAllPrice.do"
+    params = {
+        "code": api_key,
+        "out": "xml"
+    }
+    response = requests.get(url, params=params)
+
+    # 응답 내용을 출력하여 디버그
+    print(f"Request URL: {response.url}")
+    print(f"Response Content: {response.content.decode('utf-8')}")
+
+    try:
+        root = ET.fromstring(response.content)
+    except ET.ParseError as e:
+        print(f"XML Parse Error: {e}")
+        return None
+
+    gas_avg = {}
+    for item in root.findall('.//OIL'):
+        gas_avg["date"] = item.findtext('TRADE_DT')
+        gas_avg["product_name"] = item.findtext('PRODNM')
+        gas_avg["price"] = item.findtext('PRICE')
+        gas_avg["diff"] = item.findtext('DIFF')
+
+    print("Gas AVG Info:", gas_avg)  # 디버깅 메시지 추가
+    return gas_avg
+
+def get_price_history_gasoline(api_key, station_id):
+    url = "http://www.opinet.co.kr/api/avgRecentPrice.do"
+    params = {
+        "code": api_key,
+        "out": "xml",
+        "date":"",
+        "prodcd": "B027"
+    }
+    response = requests.get(url, params=params)
+
+    # 응답 내용을 출력하여 디버그
+    print(f"Request URL: {response.url}")
+    print(f"Response Content: {response.content.decode('utf-8')}")
+
+    try:
+        root = ET.fromstring(response.content)
+    except ET.ParseError as e:
+        print(f"XML Parse Error: {e}")
+        return None
+
+    gas_history_gasoline = {}
+    for item in root.findall('.//OIL'):
+        gas_history_gasoline["date"] = item.findtext('DATE')
+        gas_history_gasoline["product_code"] = item.findtext('PRODCD')
+        gas_history_gasoline["price"] = item.findtext('PRICE')
+
+    print("Gas AVG Info:", gas_history_gasoline)  # 디버깅 메시지 추가
+    return gas_history_gasoline
+
+def get_price_history_diesel(api_key, station_id):
+    url = "http://www.opinet.co.kr/api/avgRecentPrice.do"
+    params = {
+        "code": api_key,
+        "out": "xml",
+        "date":"",
+        "prodcd": "B047"
+    }
+    response = requests.get(url, params=params)
+
+    # 응답 내용을 출력하여 디버그
+    print(f"Request URL: {response.url}")
+    print(f"Response Content: {response.content.decode('utf-8')}")
+
+    try:
+        root = ET.fromstring(response.content)
+    except ET.ParseError as e:
+        print(f"XML Parse Error: {e}")
+        return None
+
+    gas_history_diesel= {}
+    for item in root.findall('.//OIL'):
+        gas_history_diesel["date"] = item.findtext('DATE')
+        gas_history_diesel["product_code"] = item.findtext('PRODCD')
+        gas_history_diesel["price"] = item.findtext('PRICE')
+
+    print("Gas AVG Info:", gas_history_diesel)  # 디버깅 메시지 추가
+    return gas_history_diesel
