@@ -13,6 +13,8 @@ GASSTATION_API_KEY = "F240513145"
 root = tk.Tk()
 root.title("프로그램 GUI")
 root.geometry("800x600")  # 크기를 더 크게 설정하여 지도가 표시될 공간을 확보
+root.configure(bg='white')  # 창 배경색을 흰색으로 설정
+
 map_label = None  # 전역 변수로 선언
 
 # 이미지 불러오기
@@ -202,10 +204,10 @@ def show_mail():
 def show_station_info(station_info):
     global map_label  # 전역 변수로 선언
 
-    info_frame = tk.Frame(right_frame, bg='white')
+    info_frame = tk.Frame(right_frame, bg='lightgray')
     info_frame.grid(row=2, column=0, columnspan=1, sticky="nsew")  # 기존의 검색 결과 프레임 아래에 배치
 
-    top_label = tk.Label(info_frame, text="주유소 상세 정보", font=("Helvetica", 14))
+    top_label = tk.Label(info_frame, text="주유소 정보", font=("Helvetica", 20), bg='lightgray')
     top_label.grid(row=0, column=0, columnspan=2, pady=10)
 
     info_labels = [
@@ -220,10 +222,10 @@ def show_station_info(station_info):
 
     for i, (label_text, info_text) in enumerate(info_labels):
         if label_text not in ("GIS X 좌표", "GIS Y 좌표"):  # GIS X, Y 좌표 부분 제외
-            label = tk.Label(info_frame, text=label_text)
+            label = tk.Label(info_frame, text=label_text, bg='lightgray')
             label.grid(row=i + 1, column=0, padx=10, pady=5, sticky='w')
 
-            info_label = tk.Label(info_frame, text=info_text)
+            info_label = tk.Label(info_frame, text=info_text, bg='lightgray')
             info_label.grid(row=i + 1, column=1, padx=10, pady=5, sticky='w')
 
     # 지도 표시용 레이블 (상세 정보 오른쪽에 배치)
