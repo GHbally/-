@@ -159,9 +159,10 @@ def show_chart():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
 
     # # 7일간 전국 휘발유 평균 가격 그래프
-    # gasoline_history = gasstation.get_price_history_gasoline(api_key=GASSTATION_API_KEY, station_id=id)
-    # diesel_history = gasstation.get_price_history_diesel(api_key=GASSTATION_API_KEY, station_id=id)
-    #
+    gasoline_history = gasstation.get_price_history_gasoline(api_key=GASSTATION_API_KEY)
+    diesel_history = gasstation.get_price_history_disel(api_key=GASSTATION_API_KEY)
+    print(gasoline_history)
+    print(diesel_history)
     # gasoline_dates = [entry['date'] for entry in gasoline_history]
     # gasoline_prices = [entry['price'] for entry in gasoline_history]
     #

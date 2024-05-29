@@ -166,12 +166,12 @@ def get_avg_prices(api_key, station_id):
     print("Gas AVG Info:", gas_avg)  # 디버깅 메시지 추가
     return gas_avg
 
-def get_price_history_gasoline(api_key, station_id):
+def get_price_history_gasoline(api_key):
     url = "http://www.opinet.co.kr/api/avgRecentPrice.do"
     params = {
         "code": api_key,
         "out": "xml",
-        "date":"",
+        "date": "",
         "prodcd": "B027"
     }
     response = requests.get(url, params=params)
@@ -186,22 +186,26 @@ def get_price_history_gasoline(api_key, station_id):
         print(f"XML Parse Error: {e}")
         return None
 
-    gas_history_gasoline = {}
+
+    gas_history_gasoline = []
     for item in root.findall('.//OIL'):
-        gas_history_gasoline["date"] = item.findtext('DATE')
-        gas_history_gasoline["product_code"] = item.findtext('PRODCD')
-        gas_history_gasoline["price"] = item.findtext('PRICE')
+        history = {
+            "date": item.findtext('DATE'),
+            "product_code": item.findtext('PRODCD'),
+            "price": item.findtext('PRICE'),
+        }
+        gas_history_gasoline.append(history)
 
     print("Gas AVG Info:", gas_history_gasoline)  # 디버깅 메시지 추가
     return gas_history_gasoline
 
-def get_price_history_diesel(api_key, station_id):
+def get_price_history_disel(api_key):
     url = "http://www.opinet.co.kr/api/avgRecentPrice.do"
     params = {
         "code": api_key,
         "out": "xml",
-        "date":"",
-        "prodcd": "B047"
+        "date": "",
+        "prodcd": "D047"
     }
     response = requests.get(url, params=params)
 
@@ -215,11 +219,15 @@ def get_price_history_diesel(api_key, station_id):
         print(f"XML Parse Error: {e}")
         return None
 
-    gas_history_diesel= {}
-    for item in root.findall('.//OIL'):
-        gas_history_diesel["date"] = item.findtext('DATE')
-        gas_history_diesel["product_code"] = item.findtext('PRODCD')
-        gas_history_diesel["price"] = item.findtext('PRICE')
 
-    print("Gas AVG Info:", gas_history_diesel)  # 디버깅 메시지 추가
-    return gas_history_diesel
+    gas_history_disel = []
+    for item in root.findall('.//OIL'):
+        history = {
+            "date": item.findtext('DATE'),
+            "product_code": item.findtext('PRODCD'),
+            "price": item.findtext('PRICE'),
+        }
+        gas_history_disel.append(history)
+
+    print("Gas AVG Info:", gas_history_disel)  # 디버깅 메시지 추가
+    return gas_history_disel
