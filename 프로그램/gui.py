@@ -20,11 +20,13 @@ search_icon = Image.open("image/찾기.png").resize((100, 100), Image.LANCZOS)
 favorite_icon = Image.open("image/즐겨찾기.png").resize((100, 100), Image.LANCZOS)
 chart_icon = Image.open("image/그래프.png").resize((100, 100), Image.LANCZOS)
 mail_icon = Image.open("image/메일.png").resize((100, 100), Image.LANCZOS)
+main_image = Image.open("image/메인.png").resize((400, 400), Image.LANCZOS)
 
 search_photo = ImageTk.PhotoImage(search_icon)
 favorite_photo = ImageTk.PhotoImage(favorite_icon)
 chart_photo = ImageTk.PhotoImage(chart_icon)
 mail_photo = ImageTk.PhotoImage(mail_icon)
+main_photo = ImageTk.PhotoImage(main_image)
 
 # 프레임 설정
 left_frame = tk.Frame(root, width=100, bg='white')
@@ -232,6 +234,19 @@ def show_station_info(station_info):
 map_label = tk.Label(right_frame)
 map_label.grid(row=2, column=1, columnspan=1, sticky="nsew")
 
+# 기본 메인 화면에 이미지 표시
+def show_main_image():
+    global map_label
+    for widget in right_frame.winfo_children():
+        if widget != map_label:  # map_label을 삭제하지 않도록 예외 처리
+            widget.destroy()
+    if map_label:
+        map_label.destroy()
+        map_label = None  # map_label을 None으로 설정
+
+    main_image_label = tk.Label(right_frame, image=main_photo)
+    main_image_label.pack(expand=True)
+
 # 버튼 추가
 search_button = tk.Button(left_frame, image=search_photo, command=show_search)
 search_button.pack(pady=20)
@@ -246,6 +261,6 @@ mail_button = tk.Button(left_frame, image=mail_photo, command=show_mail)
 mail_button.pack(pady=20)
 
 # 기본 화면 설정
-show_search()
+show_main_image()
 
 root.mainloop()
