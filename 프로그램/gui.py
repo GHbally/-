@@ -177,30 +177,43 @@ def show_chart():
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
 
-    # # 7일간 전국 휘발유 평균 가격 그래프
+
+    # 7일간 전국 휘발유 평균 가격 그래프
     gasoline_history = gasstation.get_price_history_gasoline(api_key=GASSTATION_API_KEY)
     diesel_history = gasstation.get_price_history_disel(api_key=GASSTATION_API_KEY)
-    print(gasoline_history)
-    print(diesel_history)
-    # gasoline_dates = [entry['date'] for entry in gasoline_history]
-    # gasoline_prices = [entry['price'] for entry in gasoline_history]
+    #print(gasoline_history)
+    #print(diesel_history)
+    gasoline_prices = [entry['price'] for entry in gasoline_history]
+    diesel_prices = [entry['price'] for entry in diesel_history]
+
+    # 막대 그래프의 위치
+    days = ['7', '6', '5', '4', '3', '2', '1']
+
+    # # Y축 범위 및 레이블 설정
+    # custom_ticks = [1000, 1200, 1400, 1600, 1800, 2000]  # 임의의 y축 값
+    # custom_labels = ['1000', '1200', '1400', '1600', '1800', '2000']  # 임의의 y축 레이블
     #
-    # diesel_dates = [entry['date'] for entry in diesel_history]
-    # diesel_prices = [entry['price'] for entry in diesel_history]
+    # ax1.set_yticks(custom_ticks)
+    # ax1.set_yticklabels(custom_labels)
+    # ax1.set_ylim(1000, 2000)
     #
-    # # 휘발유 평균 가격 그래프
-    # ax1.plot(gasoline_dates, gasoline_prices, label='휘발유 평균 가격')
-    # ax1.set_title('7일간 전국 휘발유 평균 가격')
-    # ax1.set_xlabel('날짜')
-    # ax1.set_ylabel('가격 (원)')
-    # ax1.legend()
-    #
-    # # 경유 평균 가격 그래프
-    # ax2.plot(diesel_dates, diesel_prices, label='경유 평균 가격', color='orange')
-    # ax2.set_title('7일간 전국 경유 평균 가격')
-    # ax2.set_xlabel('날짜')
-    # ax2.set_ylabel('가격 (원)')
-    # ax2.legend()
+    # ax2.set_yticks(custom_ticks)
+    # ax2.set_yticklabels(custom_labels)
+    # ax2.set_ylim(1000, 2000)
+
+    # 휘발유 평균 가격 그래프
+    ax1.bar(days, gasoline_prices, label='123')
+    ax1.set_title('7')
+    ax1.set_ylabel(' ')
+    ax1.legend()
+
+    # 경유 평균 가격 그래프
+    ax2.bar(days, diesel_prices, label='123', color='orange')
+    ax2.set_title('7')
+    ax2.set_ylabel(' ')
+    ax2.legend()
+
+
 
     fig.autofmt_xdate()
 
