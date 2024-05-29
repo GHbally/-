@@ -11,7 +11,7 @@ GASSTATION_API_KEY = "F240513145"
 
 # 창 설정
 root = tk.Tk()
-root.title("프로그램 GUI")
+root.title("주유도사")
 root.geometry("800x600")  # 크기를 더 크게 설정하여 지도가 표시될 공간을 확보
 root.configure(bg='white')  # 창 배경색을 흰색으로 설정
 
