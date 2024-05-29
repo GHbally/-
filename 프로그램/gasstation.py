@@ -156,16 +156,17 @@ def get_avg_prices(api_key, station_id):
         print(f"XML Parse Error: {e}")
         return None
 
-    gas_avg = {}
+    gas_avg = []
     for item in root.findall('.//OIL'):
-        gas_avg["date"] = item.findtext('TRADE_DT')
-        gas_avg["product_name"] = item.findtext('PRODNM')
-        gas_avg["price"] = item.findtext('PRICE')
-        gas_avg["diff"] = item.findtext('DIFF')
-
+        average = {
+        "date": item.findtext('TRADE_DT'),
+        "product_name" : item.findtext('PRODNM'),
+        "price" : item.findtext('PRICE'),
+        "diff" : item.findtext('DIFF'),
+        }
+        gas_avg.append(average)
     print("Gas AVG Info:", gas_avg)  # 디버깅 메시지 추가
     return gas_avg
-
 def get_price_history_gasoline(api_key):
     url = "http://www.opinet.co.kr/api/avgRecentPrice.do"
     params = {

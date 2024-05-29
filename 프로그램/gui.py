@@ -131,16 +131,30 @@ def show_chart():
     # 평균가 정보 가져오기
     avg_prices = gasstation.get_avg_prices(api_key=GASSTATION_API_KEY, station_id=id)
 
+    # 휘발유와 경유 평균 가격 추출
+    gasoline_price = None
+    diesel_price = None
+    date_str = None
+
+    for avg in avg_prices:
+        if avg['product_name'] == '휘발유':
+            gasoline_price = avg['price']
+            date_str = avg['date']  # 날짜는 동일하므로 한번만 추출
+        elif avg['product_name'] == '자동차용경유':
+            diesel_price = avg['price']
+
+    if date_str:
+        year = date_str[:4]
+        month = date_str[4:6]
+        day = date_str[6:8]
+
     # 화면 위쪽에 평균가 정보 표시
     top_frame = tk.Frame(right_frame, bg='white')
     top_frame.pack(side='top', fill='x', padx=10, pady=10)
 
-    date_str= avg_prices['date']
-    year = date_str[:4]
-    month = date_str[4:6]
-    day = date_str[6:8]
-    current_price_label = tk.Label(top_frame, text=f"{year}년 {month}월 {day}일 전국 일일 평균 주유소 가격", font=("Helvetica", 14))
-    current_price_label.pack()
+    if date_str:
+        current_price_label = tk.Label(top_frame, text=f"{year}년 {month}월 {day}일 전국 일일 평균 주유소 가격", font=("Helvetica", 14), bg='white')
+        current_price_label.pack()
 
     gasoline_frame = tk.Frame(top_frame, bg='white')
     gasoline_frame.pack(side='top', fill='x', padx=10, pady=5)
@@ -148,15 +162,13 @@ def show_chart():
     diesel_frame = tk.Frame(top_frame, bg='white')
     diesel_frame.pack(side='top', fill='x', padx=10, pady=5)
 
-    gasoline_label = tk.Label(gasoline_frame, text=f"휘발유 평균 가격: {avg_prices['price']}원", font=("Helvetica", 14))
-    gasoline_label.pack(side='left', padx=10)
+    if gasoline_price:
+        gasoline_label = tk.Label(gasoline_frame, text=f"휘발유 평균 가격: {gasoline_price}원", font=("Helvetica", 14), bg='white')
+        gasoline_label.pack(side='left', padx=10)
 
-    diesel_label = tk.Label(diesel_frame, text=f"경유 평균 가격: {avg_prices['price']}원", font=("Helvetica", 14))
-    diesel_label.pack(side='left', padx=10)
-
-    # 화면 아래쪽에 그래프 표시
-    bottom_frame = tk.Frame(right_frame, bg='white')
-    bottom_frame.pack(side='top', fill='both', expand=True)
+    if diesel_price:
+        diesel_label = tk.Label(diesel_frame, text=f"경유 평균 가격: {diesel_price}원", font=("Helvetica", 14), bg='white')
+        diesel_label.pack(side='left', padx=10)
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
 
@@ -187,7 +199,7 @@ def show_chart():
 
     fig.autofmt_xdate()
 
-    canvas = FigureCanvasTkAgg(fig, master=bottom_frame)
+    canvas = FigureCanvasTkAgg(fig, master=top_frame)
     canvas.draw()
     canvas.get_tk_widget().pack(fill='both', expand=True)
 def show_mail():
