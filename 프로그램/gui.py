@@ -125,6 +125,9 @@ def show_favorite():
 
 
 def show_chart():
+    from matplotlib import rcParams
+    rcParams["font.family"] = "Malgun Gothic"
+    rcParams["axes.unicode_minus"] = False
     global map_label  # 전역 변수로 선언
     for widget in right_frame.winfo_children():
         if widget != map_label:  # map_label을 삭제하지 않도록 예외 처리
@@ -175,7 +178,7 @@ def show_chart():
         diesel_label = tk.Label(diesel_frame, text=f"경유 평균 가격: {diesel_price}원", font=("Helvetica", 14), bg='white')
         diesel_label.pack(side='left', padx=10)
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5),gridspec_kw={'wspace': 0.3})
 
 
     # 7일간 전국 휘발유 평균 가격 그래프
@@ -187,32 +190,45 @@ def show_chart():
     diesel_prices = [entry['price'] for entry in diesel_history]
 
     # 막대 그래프의 위치
-    days = ['7', '6', '5', '4', '3', '2', '1']
-
-    # # Y축 범위 및 레이블 설정
-    # custom_ticks = [1000, 1200, 1400, 1600, 1800, 2000]  # 임의의 y축 값
-    # custom_labels = ['1000', '1200', '1400', '1600', '1800', '2000']  # 임의의 y축 레이블
-    #
-    # ax1.set_yticks(custom_ticks)
-    # ax1.set_yticklabels(custom_labels)
-    # ax1.set_ylim(1000, 2000)
-    #
-    # ax2.set_yticks(custom_ticks)
-    # ax2.set_yticklabels(custom_labels)
-    # ax2.set_ylim(1000, 2000)
+    days = ['D+6', 'D+5', 'D+4', 'D+3', 'D+2', 'D+1','D-DAY']
 
     # 휘발유 평균 가격 그래프
-    ax1.bar(days, gasoline_prices, label='123')
-    ax1.set_title('7')
-    ax1.set_ylabel(' ')
+    gasoline_prices = [float(entry['price']) for entry in gasoline_history]
+    diesel_prices = [float(entry['price']) for entry in diesel_history]
+
+    x_positions = range(len(days))  # 기본 x 위치
+    adjusted_x_positions = [x -0.20 for x in x_positions]  # 각 x 위치를 오른쪽으로 약간 이동
+
+    custom_ticks = [1500, 1600, 1700, 1750]  # 휘발유 가격 범위
+    custom_labels = ['1500', '1600', '1700', '1750']
+
+    custom_ticks1 = [1400, 1450, 1500, 1550, 1600]  # 경유 가격 범위
+    custom_labels1 = ['1400', '1450', '1500', '1550', '1600']
+
+    # Y축 설정
+    ax1.set_yticks(custom_ticks)
+    ax1.set_yticklabels(custom_labels)
+    ax1.set_ylim(1500, 1750)
+
+    ax2.set_yticks(custom_ticks1)
+    ax2.set_yticklabels(custom_labels1)
+    ax2.set_ylim(1400, 1600)
+
+    # 휘발유 평균 가격 그래프
+    ax1.bar(adjusted_x_positions, gasoline_prices, tick_label=days, label='휘발유 평균 가격')
+    ax1.set_title('7일간 전국 휘발유 평균 가격')
+    ax1.set_ylabel('가격 (원)')
+    ax1.set_xticks(x_positions)
+    ax1.set_xticklabels(days, rotation=0, ha='center')
     ax1.legend()
 
     # 경유 평균 가격 그래프
-    ax2.bar(days, diesel_prices, label='123', color='orange')
-    ax2.set_title('7')
-    ax2.set_ylabel(' ')
+    ax2.bar(adjusted_x_positions, diesel_prices, tick_label=days, label='경유 평균 가격', color='orange')
+    ax2.set_title('7일간 전국 경유 평균 가격')
+    ax2.set_ylabel('가격 (원)')
+    ax2.set_xticks(x_positions)
+    ax2.set_xticklabels(days, rotation=0, ha='center')
     ax2.legend()
-
 
 
     fig.autofmt_xdate()
@@ -251,12 +267,13 @@ def show_station_info(station_info):
     top_label = tk.Label(info_frame, text="주유소 정보", font=("Helvetica", 20), bg='lightgray')
     top_label.grid(row=0, column=0, columnspan=2, pady=10)
 
-    if station_info["id"] in favorite_stations:
+
+    if any(station["id"] == station_info["id"] for station in favorite_stations):
         favorite_state_button = tk.Button(info_frame, image=favorite_on_photo,
-                                    command=lambda: toggle_favorite(station_info, favorite_state_button))
+                                          command=lambda: toggle_favorite(station_info, favorite_state_button))
     else:
         favorite_state_button = tk.Button(info_frame, image=favorite_off_photo,
-                                    command=lambda: toggle_favorite(station_info, favorite_state_button))
+                                          command=lambda: toggle_favorite(station_info, favorite_state_button))
     favorite_state_button.grid(row=0, column=1, padx=10, pady=10, sticky='ne')
 
     info_labels = [
