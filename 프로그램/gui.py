@@ -5,8 +5,11 @@ import gasstation  # gasstation.py 모듈 임포트
 import googlemap  # googlemap.py 모듈 임포트
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import mysmtplib
+from email.mime.base import MIMEBase
+from email.mime.text import MIMEText
 
-import spam
+#import spam
 
 # API 키 설정 (여기에 실제 API 키를 입력해야 합니다)
 GASSTATION_API_KEY = "F240513145"
@@ -314,15 +317,70 @@ def show_chart():
     canvas.get_tk_widget().pack(fill='both', expand=True)
 def show_mail():
     global map_label, info_frame  # 전역 변수로 선언
-    for widget in right_frame.winfo_children():
-        widget.destroy()  # 모든 위젯을 삭제
 
-    if map_label:
-        map_label.destroy()
-        map_label = None  # map_label을 None으로 설정
-    label = tk.Label(right_frame, text="메일 화면")
-    label.pack()
+    # 메일 입력 창을 띄우는 함수
+    def open_mail_window():
+        mail_window = tk.Toplevel(root)
+        mail_window.title("메일 입력")
+        mail_window.geometry("400x200")
+        mail_window.configure(bg='white')
 
+        label = tk.Label(mail_window, text="이메일을 입력하세요:", font=("Helvetica", 14), bg='white')
+        label.pack(pady=10)
+
+        email_entry = tk.Entry(mail_window, width=50)
+        email_entry.pack(pady=10)
+
+        def send_email():
+            email_address = email_entry.get()
+            if email_address:
+                send_gas_station_info(email_address)
+                mail_window.destroy()
+            else:
+                messagebox.showerror("오류", "이메일 주소를 입력하세요.")
+
+        send_button = tk.Button(mail_window, text="보내기", command=send_email)
+        send_button.pack(pady=10)
+
+    open_mail_window()
+
+def send_gas_station_info(recipient_email):
+    host = "smtp.gmail.com"
+    port = "587"
+    sender_addr = "adlegon56@gmail.com"
+    sender_password = "wmhf bvau drgx kczv"
+
+    subject = "최근 휘발유 및 경유 가격 기록"
+    body = "최근 경유 및 휘발유 전국 가격 정보입니다:\n\n"
+
+    # 전국 10개 주유소 정보 가져오기
+    body += "휘발유 최근 가격 기록:\n"
+    gasoline_history = gasstation.get_price_history_gasoline(GASSTATION_API_KEY)
+    for record in gasoline_history:
+        body += f"날짜: {record['date']}, 가격: {record['price']}원\n"
+
+    # 경유 최근 가격 기록 추가
+    body += "\n경유 최근 가격 기록:\n"
+    diesel_history = gasstation.get_price_history_disel(GASSTATION_API_KEY)
+    for record in diesel_history:
+        body += f"날짜: {record['date']}, 가격: {record['price']}원\n"
+
+    msg = MIMEBase("multipart", "alternative")
+    msg['Subject'] = subject
+    msg['From'] = sender_addr
+    msg['To'] = recipient_email
+    msg.attach(MIMEText(body, 'plain', _charset='UTF-8'))
+
+    # 메일 발송
+    s = mysmtplib.MySMTP(host, port)
+    s.ehlo()
+    s.starttls()
+    s.ehlo()
+    s.login(sender_addr, sender_password)
+    s.sendmail(sender_addr, [recipient_email], msg.as_string())
+    s.close()
+
+    messagebox.showinfo("메일 발송", f"{recipient_email}로 메일이 발송되었습니다.")
 def toggle_favorite(station_info, button):
     station_id = station_info["id"]
     if any(station["id"] == station_id for station in favorite_stations):
