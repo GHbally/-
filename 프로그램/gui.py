@@ -6,6 +6,7 @@ import googlemap  # googlemap.py 모듈 임포트
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+
 import spam
 
 # API 키 설정 (여기에 실제 API 키를 입력해야 합니다)
@@ -228,16 +229,16 @@ def show_chart():
             diesel_price = avg['price']
 
     if date_str:
-        year = date_str[:4]
-        month = date_str[4:6]
-        day = date_str[6:8]
+        date = list(spam.date(date_str))
+
+        DateText = '' +date[0]+'년'+date[1]+'월'+date[2]+'일 전국 일일 평균 주유소 가격'
 
     # 화면 위쪽에 평균가 정보 표시
     top_frame = tk.Frame(right_frame, bg='white')
     top_frame.pack(side='top', fill='x', padx=10, pady=10)
 
     if date_str:
-        current_price_label = tk.Label(top_frame, text=f"{year}년 {month}월 {day}일 전국 일일 평균 주유소 가격", font=("Helvetica", 14), bg='white')
+        current_price_label = tk.Label(top_frame, text=DateText, font=("Helvetica", 14), bg='white')
         current_price_label.pack()
 
     gasoline_frame = tk.Frame(top_frame, bg='white')

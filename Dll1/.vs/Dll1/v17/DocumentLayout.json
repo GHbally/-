@@ -3,8 +3,11 @@
   "WorkspaceRootPath": "C:\\Users\\cjy_0\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\24\uB144 4\uD559\uB144 1\uD559\uAE30\\\uC2A4\uD06C\uB9BD\uD2B8\uC5B8\uC5B4\\\uD140\uD504\uB85C\uC81D\uD2B8\\JuYooDoSa\\Dll1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{150AF4A2-162D-4BE3-885B-015E59EEEF71}|Dll1.vcxproj|C:\\Users\\cjy_0\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\24\uB144 4\uD559\uB144 1\uD559\uAE30\\\uC2A4\uD06C\uB9BD\uD2B8\uC5B8\uC5B4\\\uD140\uD504\uB85C\uC81D\uD2B8\\JuYooDoSa\\Dll1\\spammodule.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{150AF4A2-162D-4BE3-885B-015E59EEEF71}|Dll1.vcxproj|solutionrelative:spammodule.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{150AF4A2-162D-4BE3-885B-015E59EEEF71}|Dll1.vcxproj|C:\\Users\\cjy_0\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\24\uB144 4\uD559\uB144 1\uD559\uAE30\\\uC2A4\uD06C\uB9BD\uD2B8\uC5B8\uC5B4\\\uD140\uD504\uB85C\uC81D\uD2B8\\JuYooDoSa\\Dll1\\spammoduel.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{150AF4A2-162D-4BE3-885B-015E59EEEF71}|Dll1.vcxproj|solutionrelative:spammoduel.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\cjy_0\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\24\uB144 4\uD559\uB144 1\uD559\uAE30\\\uC2A4\uD06C\uB9BD\uD2B8\uC5B8\uC5B4\\\uC2E4\uC2B5\\python36-master\\1\uBD80\\9\uC7A5\\spam\\spammodule.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,19 +17,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "spammodule.c",
-              "DocumentMoniker": "C:\\Users\\cjy_0\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\24\uB144 4\uD559\uB144 1\uD559\uAE30\\\uC2A4\uD06C\uB9BD\uD2B8\uC5B8\uC5B4\\\uD140\uD504\uB85C\uC81D\uD2B8\\JuYooDoSa\\Dll1\\spammodule.c",
-              "RelativeDocumentMoniker": "spammodule.c",
-              "ToolTip": "C:\\Users\\cjy_0\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\24\uB144 4\uD559\uB144 1\uD559\uAE30\\\uC2A4\uD06C\uB9BD\uD2B8\uC5B8\uC5B4\\\uD140\uD504\uB85C\uC81D\uD2B8\\JuYooDoSa\\Dll1\\spammodule.c",
-              "RelativeToolTip": "spammodule.c",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAACgAAAAkAAAA",
+              "Title": "spammoduel.c",
+              "DocumentMoniker": "C:\\Users\\cjy_0\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\24\uB144 4\uD559\uB144 1\uD559\uAE30\\\uC2A4\uD06C\uB9BD\uD2B8\uC5B8\uC5B4\\\uD140\uD504\uB85C\uC81D\uD2B8\\JuYooDoSa\\Dll1\\spammoduel.c",
+              "RelativeDocumentMoniker": "spammoduel.c",
+              "ToolTip": "C:\\Users\\cjy_0\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\24\uB144 4\uD559\uB144 1\uD559\uAE30\\\uC2A4\uD06C\uB9BD\uD2B8\uC5B8\uC5B4\\\uD140\uD504\uB85C\uC81D\uD2B8\\JuYooDoSa\\Dll1\\spammoduel.c",
+              "RelativeToolTip": "spammoduel.c",
+              "ViewState": "AQIAACEAAAAAAAAAAAAAAC4AAAA6AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2024-06-11T10:23:10.415Z",
+              "WhenOpened": "2024-06-11T12:44:18.541Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "spammodule.c",
+              "DocumentMoniker": "C:\\Users\\cjy_0\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\24\uB144 4\uD559\uB144 1\uD559\uAE30\\\uC2A4\uD06C\uB9BD\uD2B8\uC5B8\uC5B4\\\uC2E4\uC2B5\\python36-master\\1\uBD80\\9\uC7A5\\spam\\spammodule.c",
+              "RelativeDocumentMoniker": "..\\..\\..\\\uC2E4\uC2B5\\python36-master\\1\uBD80\\9\uC7A5\\spam\\spammodule.c",
+              "ToolTip": "C:\\Users\\cjy_0\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\24\uB144 4\uD559\uB144 1\uD559\uAE30\\\uC2A4\uD06C\uB9BD\uD2B8\uC5B8\uC5B4\\\uC2E4\uC2B5\\python36-master\\1\uBD80\\9\uC7A5\\spam\\spammodule.c",
+              "RelativeToolTip": "..\\..\\..\\\uC2E4\uC2B5\\python36-master\\1\uBD80\\9\uC7A5\\spam\\spammodule.c",
+              "ViewState": "AQIAAA4AAAAAAAAAAAAswDEAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2024-06-11T12:38:04.965Z",
               "EditorCaption": ""
             }
           ]
