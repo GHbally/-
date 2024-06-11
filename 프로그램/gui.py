@@ -6,6 +6,8 @@ import googlemap  # googlemap.py 모듈 임포트
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+import spam
+
 # API 키 설정 (여기에 실제 API 키를 입력해야 합니다)
 GASSTATION_API_KEY = "F240513145"
 
