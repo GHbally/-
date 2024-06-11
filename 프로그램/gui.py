@@ -8,6 +8,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import mysmtplib
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
+import noti
 
 #import spam
 
@@ -19,7 +20,7 @@ root = tk.Tk()
 root.title("주유도사")
 root.geometry("800x600")  # 크기를 더 크게 설정하여 지도가 표시될 공간을 확보
 root.configure(bg='white')  # 창 배경색을 흰색으로 설정
-
+chat_id = 7192089232
 map_label = None  # 전역 변수로 선언
 
 # 이미지 불러오기
@@ -30,6 +31,7 @@ mail_icon = Image.open("image/메일.png").resize((100, 100), Image.LANCZOS)
 main_image = Image.open("image/메인.png").resize((600, 712), Image.LANCZOS)
 favorite_on_icon = Image.open("image/즐겨찾기.png").resize((20, 20), Image.LANCZOS)
 favorite_off_icon = Image.open("image/즐겨찾기off.png").resize((20, 20), Image.LANCZOS)
+telegram_icon = Image.open("image/텔레그램.png").resize((30, 30), Image.LANCZOS)
 search_photo = ImageTk.PhotoImage(search_icon)
 favorite_photo = ImageTk.PhotoImage(favorite_icon)
 chart_photo = ImageTk.PhotoImage(chart_icon)
@@ -37,6 +39,7 @@ mail_photo = ImageTk.PhotoImage(mail_icon)
 main_photo = ImageTk.PhotoImage(main_image)
 favorite_on_photo = ImageTk.PhotoImage(favorite_on_icon)
 favorite_off_photo = ImageTk.PhotoImage(favorite_off_icon)
+telegram_icon = ImageTk.PhotoImage(telegram_icon)
 # 프레임 설정
 left_frame = tk.Frame(root, width=100, bg='lightgray')
 left_frame.pack(side='left', fill='y')
@@ -342,7 +345,18 @@ def show_mail():
         send_button = tk.Button(mail_window, text="보내기", command=send_email)
         send_button.pack(pady=10)
 
+        # 아이콘 이미지 로드    telegram_icon
+
+        # 아이콘 버튼 생성
+        def on_icon_click():
+            noti.sendWelcomeMessage(chat_id)  # chat_id는 사용자의 채팅 ID로 대체해야 합니다
+
+        icon_button = tk.Button(mail_window, image=telegram_icon, command=on_icon_click, bg='white', bd=0)
+        icon_button.image = telegram_icon # 참조 유지
+        icon_button.place(relx=1.0, rely=1.0, anchor='se', x=-10, y=-10)  # 오른쪽 아래에 위치
+
     open_mail_window()
+
 
 def send_gas_station_info(recipient_email):
     host = "smtp.gmail.com"

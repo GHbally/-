@@ -42,6 +42,13 @@ def sendMessage(user, msg):
     except:
         traceback.print_exc(file=sys.stdout)
 
+
+def sendWelcomeMessage(user):
+    msg = ("안녕하세요 주유도사 봇입니다.\n"
+           "전국 + 기름 종류 or 지역 + 지역이름(시, 군, 구) + 기름 종류를 입력하여\n"
+           "지역 내 싼 주유소 정보들을 확인하세요!")
+    sendMessage(user, msg)
+
 def run(date_param, param='11710'):
     conn = sqlite3.connect('logs.db')
     cursor = conn.cursor()
