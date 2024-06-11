@@ -20,7 +20,7 @@ root = tk.Tk()
 root.title("주유도사")
 root.geometry("800x600")  # 크기를 더 크게 설정하여 지도가 표시될 공간을 확보
 root.configure(bg='white')  # 창 배경색을 흰색으로 설정
-chat_id = 7192089232
+chat_id = 5854944105
 map_label = None  # 전역 변수로 선언
 
 # 이미지 불러오기
@@ -86,11 +86,11 @@ def show_search():
     results_frame = tk.Frame(right_frame)
     results_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
 
-    top_label = tk.Label(results_frame, text="검색 (지역 검색)", font=("Helvetica", 14))
+    top_label = tk.Label(results_frame, text="검색 (지역 검색)", font=("Helvetica", 14), width=65, height=2, bg='snow')
     top_label.grid(row=0, column=0, columnspan=2, pady=10)
 
-    search_entry = tk.Entry(results_frame, width=50)
-    search_entry.grid(row=1, column=0, padx=10, pady=10)
+    search_entry = tk.Entry(results_frame, width=26)
+    search_entry.grid(row=1, column=0, padx=10, pady=10, sticky='w')
 
     def perform_search():
         query = search_entry.get()
@@ -111,7 +111,8 @@ def show_search():
                 messagebox.showerror("오류", "지역명을 찾을 수 없습니다.")
 
     search_button = tk.Button(results_frame, text="검색", command=perform_search)
-    search_button.grid(row=1, column=1, padx=10, pady=10)
+    search_button.grid(row=1, column=0, padx=10, pady=10)
+
 
     def update_search_results(gas_stations):
         for widget in results_frame.winfo_children():

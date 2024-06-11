@@ -14,7 +14,7 @@ import traceback
 import lxml
 
 key = 'F240513145' #'여기에 API KEY를 입력하세요'
-TOKEN = '7375661036:AAHcts7hIskYwfHc3s65lc6uO3pFQjyLG9I' #'여기에 텔레그램 토큰을 입력하세요'
+TOKEN = '7171825505:AAHfB2d2MRtKfuJYxt0BeBbEa0fBDHAxbqA' #'여기에 텔레그램 토큰을 입력하세요'
 MAX_MSG_LENGTH = 300
 baseurl = 'http://www.opinet.co.kr/api/lowTop10.do?out=xml&code='+key
 bot = telepot.Bot(TOKEN)
